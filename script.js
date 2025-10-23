@@ -103,25 +103,19 @@ document.addEventListener('keydown', function(e) {
 });
 
 // ==================== FORM SUBMISSION HANDLER ====================
+// Note: Form now submits to FormSubmit service automatically
+// No additional JavaScript needed for form submission
+// But we keep this for enhanced UX feedback
+
 document.getElementById('registrationForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+    // Show loading state
+    const submitBtn = this.querySelector('.submit-btn');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Submitting...';
+    submitBtn.disabled = true;
     
-    // Get form data
-    const formData = new FormData(this);
-    const data = {};
-    formData.forEach((value, key) => {
-        data[key] = value;
-    });
-    
-    // Here you would typically send the data to a server
-    // For example, using fetch() to send to your backend
-    console.log('Form submitted with data:', data);
-    
-    // Show success message
-    alert('Thank you for registering with AIMAAN! We will contact you shortly with more information about your chosen program.');
-    
-    // Reset form
-    this.reset();
+    // Form will be submitted automatically by FormSubmit
+    // You can add additional client-side validation here if needed
 });
 
 // ==================== GALLERY FILTER FUNCTIONALITY ====================

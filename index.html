@@ -418,43 +418,50 @@
         </div>
     </section>
 
-    <!-- Registration Form Section -->
+<!-- Registration Form Section -->
     <section class="registration" id="register">
         <div class="container">
             <h2 class="section-title">Join AIMAAN Today</h2>
             <p class="section-subtitle">Begin Your Martial Arts Journey</p>
             <div class="form-container">
-                <form id="registrationForm">
+                <!-- Option 1: Using FormSubmit (Email Service) -->
+                <form action="https://formsubmit.co/aimaannigeria@gmail.com" method="POST" id="registrationForm">
+                    <!-- FormSubmit Configuration -->
+                    <input type="hidden" name="_subject" value="New AIMAAN Registration">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_template" value="table">
+                    <input type="hidden" name="_next" value="https://yourdomain.com/thank-you.html">
+                    
                     <div class="form-row">
                         <div class="form-group">
                             <label for="firstName">First Name *</label>
-                            <input type="text" id="firstName" name="firstName" required>
+                            <input type="text" id="firstName" name="First_Name" required>
                         </div>
                         <div class="form-group">
                             <label for="lastName">Last Name *</label>
-                            <input type="text" id="lastName" name="lastName" required>
+                            <input type="text" id="lastName" name="Last_Name" required>
                         </div>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
                             <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" required>
+                            <input type="email" id="email" name="Email" required>
                         </div>
                         <div class="form-group">
                             <label for="phone">Phone Number *</label>
-                            <input type="tel" id="phone" name="phone" required>
+                            <input type="tel" id="phone" name="Phone" required>
                         </div>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
                             <label for="age">Age *</label>
-                            <input type="number" id="age" name="age" min="5" max="100" required>
+                            <input type="number" id="age" name="Age" min="5" max="100" required>
                         </div>
                         <div class="form-group">
                             <label for="gender">Gender *</label>
-                            <select id="gender" name="gender" required>
+                            <select id="gender" name="Gender" required>
                                 <option value="">Select Gender</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
@@ -464,18 +471,18 @@
                     
                     <div class="form-group">
                         <label for="program">Preferred Program *</label>
-                        <select id="program" name="program" required>
+                        <select id="program" name="Program" required>
                             <option value="">Select a Program</option>
-                            <option value="karate">Karate</option>
-                            <option value="taekwondo">Taekwondo</option>
+                            <option value="karate">Kyorugi (sparring)</option>
+                            <option value="taekwondo">Poomsae (forms or patterns)</option>
                             <option value="judo">Judo</option>
-                            <option value="kickboxing">Kickboxing</option>
+                            <option value="kickboxing">Regular fitness training</option>
                         </select>
                     </div>
                     
                     <div class="form-group">
                         <label for="experience">Previous Martial Arts Experience</label>
-                        <select id="experience" name="experience">
+                        <select id="experience" name="Experience">
                             <option value="none">No Experience</option>
                             <option value="beginner">Beginner (Less than 1 year)</option>
                             <option value="intermediate">Intermediate (1-3 years)</option>
@@ -485,12 +492,12 @@
                     
                     <div class="form-group">
                         <label for="address">Address *</label>
-                        <input type="text" id="address" name="address" required>
+                        <input type="text" id="address" name="Address" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="message">Additional Information / Questions</label>
-                        <textarea id="message" name="message" placeholder="Tell us about your goals, health conditions, or any questions..."></textarea>
+                        <textarea id="message" name="Message" placeholder="Tell us about your goals, health conditions, or any questions..."></textarea>
                     </div>
                     
                     <button type="submit" class="submit-btn">Submit Registration</button>
