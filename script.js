@@ -116,22 +116,162 @@ document.addEventListener('keydown', function(e) {
 
 // ==================== FORM SUBMISSION HANDLER ====================
 const registrationForm = document.getElementById('registrationForm');
+
 if (registrationForm) {
-    registrationForm.addEventListener('submit', function(e) {
-        // Show loading state
+    registrationForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
         const submitBtn = this.querySelector('.submit-btn');
-        if (submitBtn) {
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Submitting...';
-            submitBtn.disabled = true;
+        const originalText = submitBtn.textContent;
+        
+        // Show loading state
+        submitBtn.textContent = 'Submitting...';
+        submitBtn.disabled = true;
+        
+        try {
+            // Create form data
+            const formData = new FormData(this);
             
-            // Reset button after 3 seconds (in case form doesn't submit)
-            setTimeout(() => {
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-            }, 3000);
+            // Remove _next parameter if it exists
+            if (formData.has('_next')) {
+                formData.delete('_next');
+            }
+            
+            // Submit to FormSubmit
+            const response = await fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (response.ok) {
+                // Show success message
+                showSuccessMessage();
+                // Reset form
+                this.reset();
+            } else {
+                throw new Error('Form submission failed');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showErrorMessage();
+        } finally {
+            // Reset button
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
         }
     });
+}
+
+function showSuccessMessage() {
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        padding: 1rem;
+    `;
+    
+    // Create success message
+    overlay.innerHTML = `
+        <div style="
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        ">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
+            <h2 style="color: #ff6b35; margin-bottom: 1rem;">Thank You!</h2>
+            <p style="color: #333; margin-bottom: 2rem; line-height: 1.6;">
+                Your registration has been submitted successfully. We have received your information 
+                and will contact you shortly to welcome you to AIMAAN.
+            </p>
+            <button onclick="this.closest('div[style]').remove()" style="
+                background: #ff6b35;
+                color: white;
+                border: none;
+                padding: 1rem 2rem;
+                border-radius: 25px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            " onmouseover="this.style.background='#e55a2b'" 
+               onmouseout="this.style.background='#ff6b35'">
+                Continue
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+    
+    // Auto-remove after 10 seconds
+    setTimeout(() => {
+        if (overlay.parentNode) {
+            overlay.remove();
+        }
+    }, 10000);
+}
+
+function showErrorMessage() {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        padding: 1rem;
+    `;
+    
+    overlay.innerHTML = `
+        <div style="
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        ">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">⚠️</div>
+            <h2 style="color: #e74c3c; margin-bottom: 1rem;">Submission Error</h2>
+            <p style="color: #333; margin-bottom: 2rem; line-height: 1.6;">
+                Sorry, there was an error submitting your form. Please try again 
+                or contact us directly at aimaannigeria@gmail.com
+            </p>
+            <button onclick="this.closest('div[style]').remove()" style="
+                background: #e74c3c;
+                color: white;
+                border: none;
+                padding: 1rem 2rem;
+                border-radius: 25px;
+                font-weight: bold;
+                cursor: pointer;
+            ">
+                Try Again
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
 }
 
 // ==================== GALLERY TOGGLE FUNCTIONALITY ====================
