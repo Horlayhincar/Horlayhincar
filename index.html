@@ -14,7 +14,6 @@
                 <img src="images/AIMAAN-LOGO.png" alt="AIMAAN Logo" class="logo-img">
                 <div class="logo-text">
                     <span class="main">AIMAAN</span>
-                  <!----  <span class="sub">MARTIAL ARTS</span>-->
                 </div>
             </a>
             <ul class="nav-links" id="navLinks">
@@ -109,11 +108,11 @@
         </div>
     </section>
 
-<!-- Our Instructors Section -->
-<section class="instructors">
+<!-- Our Instructors Section - FIXED: Added id="instructors" -->
+<section class="instructors" id="instructors">
     <div class="container">
-        <h1>Our Instructors</h1>
-        <p>Experienced Masters Dedicated to our Growth</p>
+        <h2 class="section-title">Our Instructors</h2>
+        <p class="section-subtitle">Experienced Masters Dedicated to our Growth</p>
         <!-- Carousel Container -->
         <div class="instructor-carousel">
             <div class="carousel-track">
@@ -187,12 +186,20 @@
     </div>
 </section>
 
-    <!-- Gallery Section -->
-    <section class="gallery" id="gallery">
-        <div class="container">
-            <h2 class="section-title">Gallery</h2>
-            <p class="section-subtitle">Moments from Our Training Sessions & Events</p>
-            
+
+<!-- Gallery Section -->
+<section class="gallery" id="gallery">
+    <div class="container">
+        <h2 class="section-title">Gallery</h2>
+        <p class="section-subtitle">Moments from Our Training Sessions & Events</p>
+        
+        <!-- View Galleries Button (Initially Shown) -->
+        <div class="gallery-toggle-container">
+            <button class="btn btn-primary" id="viewGalleriesBtn">View Galleries</button>
+        </div>
+
+        <!-- Gallery Content (Initially Hidden) -->
+        <div class="gallery-content" id="galleryContent">
             <!-- Gallery Filter Tabs -->
             <div class="gallery-filter">
                 <button class="filter-btn active" data-filter="all">All Events</button>
@@ -205,67 +212,119 @@
 
             <div class="gallery-grid">
                 <!-- National Black Belt Workshop -->
-                <div class="gallery-item" data-category="black-belt">
-                    <img src="images/gallery/black-belt-1.jpg" alt="National Black Belt Workshop">
+                <div class="gallery-item" data-category="black-belt" data-type="image">
+                    <img src="images/gallery/blackbeltwork/black-belt-1.jpg" alt="National Black Belt Workshop">
                     <div class="gallery-overlay">
                         <h4>Black Belt Workshop</h4>
-                        <p>National Training</p>
                     </div>
                 </div>
-                <div class="gallery-item" data-category="black-belt">
-                    <img src="images/gallery/black-belt-2.jpg" alt="Black Belt Workshop Training">
+                <div class="gallery-item" data-category="black-belt" data-type="image">
+                    <img src="images/gallery/blackbeltwork/black-belt-2.jpg" alt="Black Belt Workshop Training">
                     <div class="gallery-overlay">
                         <h4>Black Belt Workshop</h4>
-                        <p>Advanced Techniques</p>
                     </div>
                 </div>
-                <div class="gallery-item" data-category="black-belt">
-                    <img src="images/gallery/black-belt-3.jpg" alt="Black Belt Workshop Ceremony">
+                <div class="gallery-item" data-category="black-belt" data-type="video" data-video="videos/workshop/workshop1.mp4">
+                    <img src="images/gallery/blackbeltwork/black-belt-thumbnail.jpg" alt="Black Belt Workshop Video">
+                    <div class="gallery-overlay">
+                        <div class="video-play-icon">▶</div>
+                        <h4>Forms Highlights</h4>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="black-belt" data-type="image">
+                    <img src="images/gallery/blackbeltwork/black-belt-3.jpg" alt="Black Belt Workshop Ceremony">
                     <div class="gallery-overlay">
                         <h4>Black Belt Workshop</h4>
-                        <p>Graduation Ceremony</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="black-belt" data-type="image">
+                    <img src="images/gallery/blackbeltwork/black-belt-4.jpg" alt="Black Belt Workshop Ceremony">
+                    <div class="gallery-overlay">
+                        <h4>Black Belt Workshop</h4>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="black-belt" data-type="image">
+                    <img src="images/gallery/blackbeltwork/black-belt-5.jpg" alt="Black Belt Workshop Ceremony">
+                    <div class="gallery-overlay">
+                        <h4>Black Belt Workshop</h4>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="black-belt" data-type="image">
+                    <img src="images/gallery/blackbeltwork/black-belt-6.jpg" alt="Black Belt Workshop Ceremony">
+                    <div class="gallery-overlay">
+                        <h4>Black Belt Workshop</h4>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="black-belt" data-type="image">
+                    <img src="images/gallery/blackbeltwork/black-belt-7.jpg" alt="Black Belt Workshop Ceremony">
+                    <div class="gallery-overlay">
+                        <h4>Black Belt Workshop</h4>
                     </div>
                 </div>
 
                 <!-- Referee/Coaching Refresher Seminar -->
-                <div class="gallery-item" data-category="referee">
-                    <img src="images/gallery/referee-1.jpg" alt="Referee Seminar">
+                <div class="gallery-item" data-category="referee" data-type="image">
+                    <img src="images/gallery/referee/ref1.jpg" alt="Referee Seminar">
                     <div class="gallery-overlay">
-                        <h4>Referee Seminar</h4>
-                        <p>Training Session</p>
+                        <h4>AIMAAN Referee</h4>
                     </div>
                 </div>
-                <div class="gallery-item" data-category="referee">
-                    <img src="images/gallery/referee-2.jpg" alt="Coaching Refresher">
+                <div class="gallery-item" data-category="referee" data-type="video" data-video="videos/referee-training.mp4">
+                    <img src="images/gallery/referee-video-thumb.jpg" alt="Referee Training Video">
                     <div class="gallery-overlay">
-                        <h4>Coaching Refresher</h4>
-                        <p>Skills Development</p>
+                        <div class="video-play-icon">▶</div>
+                        <h4>Referee Training</h4>
                     </div>
                 </div>
-                <div class="gallery-item" data-category="referee">
-                    <img src="images/gallery/referee-3.jpg" alt="Referee Certification">
+                <div class="gallery-item" data-category="referee" data-type="image">
+                    <img src="images/gallery/referee/ref2.jpg" alt="Coaching Refresher">
                     <div class="gallery-overlay">
-                        <h4>Referee Certification</h4>
-                        <p>Official Training</p>
+                        <h4>AIMAAN Referee</h4>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="referee" data-type="image">
+                    <img src="images/gallery/referee/ref3.jpg" alt="Referee Certification">
+                    <div class="gallery-overlay">
+                        <h4>AIMAAN Referee</h4>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="referee" data-type="image">
+                    <img src="images/gallery/referee/ref4.jpg" alt="Referee Certification">
+                    <div class="gallery-overlay">
+                        <h4>AIMAAN Certification</h4>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="referee" data-type="image">
+                    <img src="images/gallery/referee/ref5.jpg" alt="Referee Certification">
+                    <div class="gallery-overlay">
+                        <h4>AIMAAN Referee</h4>
                     </div>
                 </div>
 
                 <!-- AIMAAN U-18 Open Championship -->
-                <div class="gallery-item" data-category="championship">
+                <div class="gallery-item" data-category="championship" data-type="image">
                     <img src="images/gallery/championship-1.jpg" alt="U-18 Championship Opening">
                     <div class="gallery-overlay">
                         <h4>U-18 Championship</h4>
                         <p>Opening Ceremony</p>
                     </div>
                 </div>
-                <div class="gallery-item" data-category="championship">
+                <div class="gallery-item" data-category="championship" data-type="image">
                     <img src="images/gallery/championship-2.jpg" alt="Championship Competition">
                     <div class="gallery-overlay">
                         <h4>U-18 Championship</h4>
                         <p>Competition Action</p>
                     </div>
                 </div>
-                <div class="gallery-item" data-category="championship">
+                <div class="gallery-item" data-category="championship" data-type="video" data-video="videos/championship.mp4">
+                    <img src="images/gallery/championship-video-thumb.jpg" alt="Championship Highlights">
+                    <div class="gallery-overlay">
+                        <div class="video-play-icon">▶</div>
+                        <h4>U-18 Championship</h4>
+                        <p>Full Event Highlights</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="championship" data-type="image">
                     <img src="images/gallery/championship-3.jpg" alt="Championship Winners">
                     <div class="gallery-overlay">
                         <h4>U-18 Championship</h4>
@@ -274,21 +333,29 @@
                 </div>
 
                 <!-- National Camp -->
-                <div class="gallery-item" data-category="national-camp">
+                <div class="gallery-item" data-category="national-camp" data-type="image">
                     <img src="images/gallery/camp-1.jpg" alt="National Camp Training">
                     <div class="gallery-overlay">
                         <h4>National Camp</h4>
                         <p>Intensive Training</p>
                     </div>
                 </div>
-                <div class="gallery-item" data-category="national-camp">
+                <div class="gallery-item" data-category="national-camp" data-type="video" data-video="videos/national-camp.mp4">
+                    <img src="images/gallery/camp-video-thumb.jpg" alt="National Camp Video">
+                    <div class="gallery-overlay">
+                        <div class="video-play-icon">▶</div>
+                        <h4>National Camp</h4>
+                        <p>Camp Experience Video</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="national-camp" data-type="image">
                     <img src="images/gallery/camp-2.jpg" alt="Camp Activities">
                     <div class="gallery-overlay">
                         <h4>National Camp</h4>
                         <p>Group Activities</p>
                     </div>
                 </div>
-                <div class="gallery-item" data-category="national-camp">
+                <div class="gallery-item" data-category="national-camp" data-type="image">
                     <img src="images/gallery/camp-3.jpg" alt="Camp Closing">
                     <div class="gallery-overlay">
                         <h4>National Camp</h4>
@@ -297,21 +364,29 @@
                 </div>
 
                 <!-- Security Seminar -->
-                <div class="gallery-item" data-category="security">
+                <div class="gallery-item" data-category="security" data-type="image">
                     <img src="images/gallery/security-1.jpg" alt="Security Seminar Session">
                     <div class="gallery-overlay">
                         <h4>Security Seminar</h4>
                         <p>Self-Defense Training</p>
                     </div>
                 </div>
-                <div class="gallery-item" data-category="security">
+                <div class="gallery-item" data-category="security" data-type="image">
                     <img src="images/gallery/security-2.jpg" alt="Security Training">
                     <div class="gallery-overlay">
                         <h4>Security Seminar</h4>
                         <p>Practical Applications</p>
                     </div>
                 </div>
-                <div class="gallery-item" data-category="security">
+                <div class="gallery-item" data-category="security" data-type="video" data-video="videos/security-seminar.mp4">
+                    <img src="images/gallery/security-video-thumb.jpg" alt="Security Seminar Video">
+                    <div class="gallery-overlay">
+                        <div class="video-play-icon">▶</div>
+                        <h4>Security Seminar</h4>
+                        <p>Training Demonstration</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="security" data-type="image">
                     <img src="images/gallery/security-3.jpg" alt="Security Certification">
                     <div class="gallery-overlay">
                         <h4>Security Seminar</h4>
@@ -320,22 +395,35 @@
                 </div>
             </div>
 
-            <!-- Load More Button -->
-            <div class="gallery-load-more">
-                <button class="btn btn-primary" id="loadMoreBtn">Load More Photos</button>
+            <!-- Close Gallery Button (Replaces Load More) -->
+            <div class="gallery-close-container">
+                <button class="btn btn-secondary" id="closeGalleriesBtn">
+                    Close Gallery
+                </button>
             </div>
         </div>
-    </section>
-
-    <!-- Gallery Lightbox Modal -->
-    <div class="gallery-lightbox" id="galleryLightbox">
-        <span class="lightbox-close">&times;</span>
-        <img src="" alt="" id="lightboxImg">
-        <div class="lightbox-caption" id="lightboxCaption"></div>
-        <button class="lightbox-prev" id="lightboxPrev">&#10094;</button>
-        <button class="lightbox-next" id="lightboxNext">&#10095;</button>
     </div>
+</section>
 
+<!-- Gallery Lightbox Modal (for images) -->
+<div class="gallery-lightbox" id="galleryLightbox">
+    <span class="lightbox-close">&times;</span>
+    <img src="" alt="" id="lightboxImg">
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+    <button class="lightbox-prev" id="lightboxPrev">&#10094;</button>
+    <button class="lightbox-next" id="lightboxNext">&#10095;</button>
+</div>
+
+<!-- Gallery Video Modal (for videos) -->
+<div class="gallery-video-modal" id="galleryVideoModal">
+    <div class="video-modal-container">
+        <button class="video-close-btn" id="galleryVideoClose">&times;</button>
+        <video id="galleryVideoPlayer" controls>
+            <source src="" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+</div>
 
     <!-- Testimonials Section -->
     <section class="testimonials">
