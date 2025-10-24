@@ -512,19 +512,16 @@
         <h2 class="section-title">Join AIMAAN Today</h2>
         <p class="section-subtitle">Begin Your Martial Arts Journey</p>
         <div class="form-container">
-            <!-- Updated FormSubmit with proper configuration -->
+            <!-- Simple FormSubmit without redirect -->
             <form action="https://formsubmit.co/aimaannigeria@gmail.com" method="POST" id="registrationForm">
                 <!-- FormSubmit Configuration -->
                 <input type="hidden" name="_subject" value="New AIMAAN Registration">
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_template" value="table">
-                <input type="hidden" name="_next" value="https://https://horlayhincar.github.io/Horlayhincar/thank-you.html"> <!-- Replace with your actual GitHub Pages URL -->
+                <!-- NO _next parameter - we'll handle success with JavaScript -->
                 
                 <!-- Honeypot for spam protection -->
                 <input type="text" name="_honey" style="display:none">
-                
-                <!-- Auto-response message -->
-                <input type="hidden" name="_autoresponse" value="Thank you for registering with AIMAAN! We have received your registration and will contact you shortly to welcome you to our martial arts family.">
                 
                 <div class="form-row">
                     <div class="form-group">
