@@ -1162,6 +1162,93 @@ nav.scrolled {
     color: var(--accent-color);
 }
 
+/* ==================== YOUTUBE MODAL ==================== */
+.youtube-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.youtube-modal.active {
+    display: flex;
+}
+
+.youtube-modal-container {
+    position: relative;
+    width: 90%;
+    max-width: 900px;
+    height: 80%;
+    max-height: 506px; /* 16:9 ratio for 900px width */
+    animation: slideIn 0.3s ease;
+}
+
+.youtube-video-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.youtube-video-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.youtube-close-btn {
+    position: absolute;
+    top: -50px;
+    right: 0;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+    padding: 5px 15px;
+    transition: all 0.3s ease;
+    z-index: 10000;
+}
+
+.youtube-close-btn:hover {
+    color: var(--primary-color);
+    transform: scale(1.2);
+}
+
+/* Responsive YouTube modal */
+@media (max-width: 768px) {
+    .youtube-modal-container {
+        width: 95%;
+        height: 60%;
+        max-height: none;
+    }
+    
+    .youtube-close-btn {
+        top: -45px;
+        font-size: 35px;
+    }
+}
+
+@media (max-width: 480px) {
+    .youtube-modal-container {
+        width: 98%;
+        height: 50%;
+    }
+    
+    .youtube-close-btn {
+        top: -40px;
+        font-size: 30px;
+    }
+}
+
 /* Watch Video Button */
 .watch-video-btn {
     display: inline-flex;

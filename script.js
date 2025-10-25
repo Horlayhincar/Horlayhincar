@@ -102,8 +102,8 @@ function closeVideoModal(modal, player) {
     document.body.style.overflow = '';
 }
 
-// News video buttons
-document.querySelectorAll('.watch-video-btn').forEach(button => {
+// ONLY handle buttons with data-video attribute (for gallery videos)
+document.querySelectorAll('.watch-video-btn[data-video]').forEach(button => {
     button.addEventListener('click', function() {
         const videoSrc = this.getAttribute('data-video');
         handleVideoModal(videoSrc, videoModal, videoPlayer);
@@ -298,6 +298,53 @@ if (galleryVideoClose) {
 if (galleryVideoModal) {
     galleryVideoModal.addEventListener('click', (e) => {
         if (e.target === galleryVideoModal) closeVideoModal();
+    });
+}
+
+// ==================== YOUTUBE MODAL HANDLER ====================
+const youtubeModal = document.getElementById('youtubeModal');
+const youtubePlayer = document.getElementById('youtubePlayer');
+const youtubeClose = document.getElementById('youtubeClose');
+
+function openYouTubeModal(videoId) {
+    if (!youtubeModal || !youtubePlayer) return;
+    
+    // Construct YouTube embed URL
+    const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+    youtubePlayer.src = embedUrl;
+    
+    youtubeModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeYouTubeModal() {
+    if (!youtubeModal || !youtubePlayer) return;
+    
+    youtubeModal.classList.remove('active');
+    youtubePlayer.src = ''; // Stop the video
+    document.body.style.overflow = '';
+}
+
+// YouTube video buttons - ONLY for buttons with data-youtube attribute
+document.querySelectorAll('.watch-video-btn[data-youtube]').forEach(button => {
+    button.addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent any default behavior
+        e.stopPropagation(); // Stop event from bubbling up
+        
+        const videoId = this.getAttribute('data-youtube');
+        console.log('Opening YouTube modal with ID:', videoId); // Debug log
+        openYouTubeModal(videoId);
+    });
+});
+
+// Close modal events
+if (youtubeClose) {
+    youtubeClose.addEventListener('click', closeYouTubeModal);
+}
+
+if (youtubeModal) {
+    youtubeModal.addEventListener('click', (e) => {
+        if (e.target === youtubeModal) closeYouTubeModal();
     });
 }
 
@@ -503,6 +550,7 @@ document.addEventListener('keydown', function(e) {
         if (galleryLightbox?.classList.contains('active')) closeLightbox();
         if (galleryVideoModal?.classList.contains('active')) closeVideoModal();
         if (videoModal?.classList.contains('active')) closeVideoModal(videoModal, videoPlayer);
+        if (youtubeModal?.classList.contains('active')) closeYouTubeModal();
         if (galleryContent?.classList.contains('active')) closeGallery();
     }
     
