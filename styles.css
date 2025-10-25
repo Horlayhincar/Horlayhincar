@@ -475,8 +475,8 @@ nav.scrolled {
 
 /* Instructor Image with White Border */
 .instructor-image {
-    width: 180px;
-    height: 180px;
+    width: 230px;
+    height: 230px;
     object-fit: cover;
     border-radius: 50%;
     display: block;
