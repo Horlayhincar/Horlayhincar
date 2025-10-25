@@ -301,25 +301,111 @@ if (galleryVideoModal) {
     });
 }
 
-// ==================== SIMPLE INSTRUCTOR CAROUSEL ====================
+// ==================== INSTRUCTOR CAROUSEL ====================
+let currentCarouselIndex = 0;
+let autoSlideInterval;
+let cardsPerView = 4;
+
+function updateCardsPerView() {
+    if (window.innerWidth <= 480) {
+        cardsPerView = 1;
+    } else if (window.innerWidth <= 768) {
+        cardsPerView = 2;
+    } else if (window.innerWidth <= 1024) {
+        cardsPerView = 3;
+    } else {
+        cardsPerView = 4;
+    }
+    return cardsPerView;
+}
+
+function moveToNextSlide() {
+    const track = document.querySelector('.carousel-track');
+    const cards = document.querySelectorAll('.instructor-card');
+    
+    if (!track || cards.length === 0) return;
+    
+    updateCardsPerView();
+    const totalSlides = Math.ceil(cards.length / cardsPerView);
+    
+    // Move to next slide
+    currentCarouselIndex = (currentCarouselIndex + 1) % totalSlides;
+    
+    // Calculate translation
+    const cardWidth = cards[0].offsetWidth + 20; // card width + gap
+    const translateX = -currentCarouselIndex * cardWidth * cardsPerView;
+    
+    track.style.transform = `translateX(${translateX}px)`;
+    track.style.transition = 'transform 0.5s ease-in-out';
+}
+
+function moveToPrevSlide() {
+    const track = document.querySelector('.carousel-track');
+    const cards = document.querySelectorAll('.instructor-card');
+    
+    if (!track || cards.length === 0) return;
+    
+    updateCardsPerView();
+    const totalSlides = Math.ceil(cards.length / cardsPerView);
+    
+    // Move to previous slide
+    currentCarouselIndex = (currentCarouselIndex - 1 + totalSlides) % totalSlides;
+    
+    // Calculate translation
+    const cardWidth = cards[0].offsetWidth + 20;
+    const translateX = -currentCarouselIndex * cardWidth * cardsPerView;
+    
+    track.style.transform = `translateX(${translateX}px)`;
+    track.style.transition = 'transform 0.5s ease-in-out';
+}
+
 function startInstructorCarousel() {
     const track = document.querySelector('.carousel-track');
     const cards = document.querySelectorAll('.instructor-card');
     
     if (!track || cards.length === 0) return;
     
-    let currentIndex = 0;
-    const cardWidth = cards[0].offsetWidth + 20;
+    // Reset position
+    currentCarouselIndex = 0;
+    track.style.transform = 'translateX(0px)';
     
-    function moveCarousel() {
-        const translateX = -currentIndex * cardWidth;
-        track.style.transform = `translateX(${translateX}px)`;
-        
-        currentIndex = (currentIndex + 1) % cards.length;
+    // Clear existing interval
+    if (autoSlideInterval) {
+        clearInterval(autoSlideInterval);
     }
     
     // Start auto-slide
-    setInterval(moveCarousel, 3000);
+    autoSlideInterval = setInterval(moveToNextSlide, 4000);
+}
+
+function createCarouselNavigation() {
+    const carouselContainer = document.querySelector('.instructor-carousel');
+    if (!carouselContainer) return;
+    
+    // Remove existing navigation if any
+    const existingNav = carouselContainer.querySelector('.carousel-nav');
+    if (existingNav) existingNav.remove();
+    
+    // Create navigation buttons
+    const nav = document.createElement('div');
+    nav.className = 'carousel-nav';
+    nav.innerHTML = `
+        <button class="carousel-prev" id="carouselPrev">‹</button>
+        <button class="carousel-next" id="carouselNext">›</button>
+    `;
+    
+    carouselContainer.appendChild(nav);
+    
+    // Add event listeners
+    document.getElementById('carouselPrev')?.addEventListener('click', moveToPrevSlide);
+    document.getElementById('carouselNext')?.addEventListener('click', moveToNextSlide);
+}
+
+// Initialize carousel on load and resize
+function initInstructorCarousel() {
+    updateCardsPerView();
+    startInstructorCarousel();
+    createCarouselNavigation();
 }
 
 // ==================== CONTACT FORM HANDLER ====================
@@ -429,6 +515,11 @@ document.addEventListener('keydown', function(e) {
 
 // ==================== INITIALIZATION ====================
 document.addEventListener('DOMContentLoaded', function() {
-    startInstructorCarousel();
+    initInstructorCarousel();
     updateGalleryImages();
+    
+    // Reinitialize carousel on resize
+    window.addEventListener('resize', function() {
+        initInstructorCarousel();
+    });
 });
