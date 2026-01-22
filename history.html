@@ -480,40 +480,49 @@
             </div>
         </section>
 
-        <!-- Archival Gallery Section -->
-        <section class="history-section">
-            <h2 class="section-title">Archival Gallery</h2>
-            <div class="archive-grid">
-                <div class="archive-item">
-                    <img src="images/archive/OjoLag2005.jpeg" alt="AIMAAN WORKSHOP, Ojokoro Lagos 2005">
-                    <p>Professor Moshood Adenrele Fashola (in white cap) at the AIMAAN Workshop, Ojokoro, Lagos — 2005. Also pictured: Grand Master N. O. Yusuf, Grand Master Ibrahim Rafiu King, and Senior Master Bashir Oyetunji</p>
-                </div>
-                <div class="archive-item">
-                    <img src="images/archive/gm-ibrahim.jpeg" alt="Grandmaster Ibrahim Rafiu King">
-                    <p>Grand Master Ibrahim Rafiu King (center), Grand Master Kehinde Salawu, and Grand Master Tunji at the AIMAAN Grading, 1990s.</p>
-                </div>
-                <div class="archive-item">
-                    <img src="images/archive/early-members.jpeg" alt="Early AIMAAN Members">
-                    <p>Veteran AIMAAN Black Belters with Grand Master N. O. Yusuf.</p>
-                </div>
-                <div class="archive-item">
-                    <img src="images/archive/workshoptraining-2005.jpeg" alt="AIMAAN Workshop 2005">
-                    <p>AIMAAN members training during the AIMAAN Workshop, Ojokoro, Lagos — 2005.</p>
-                </div>
-                <div class="archive-item">
-                    <img src="images/archive/femaleveterans-group.jpeg" alt="AIMAAN Female Veterans Group Photo">
-                    <p>Early Female Generation Members</p>
-                </div>
-                <div class="archive-item">
-                    <img src="images/archive/Honorary-certificate.jpeg" alt="Black Belt Honorary Certificate">
-                    <p>AIMAAN presents a Black Belt Honorary Certificate to the Amir Sahib, Head of Ahmadiyya Nigeria, under the leadership of Master Arowora AbdulRoqeeb — 2025.</p>
-                </div>
-                <div class="archive-item">
-                    <img src="images/archive/veterans-demo.jpeg" alt="AIMAAN veterans-demo">
-                    <p>Grand Master Ibrahim King and other AIMAAN Veterans in a demo</p>
-                </div>
-            </div>
-        </section>
+        <!-- ARCHIVE GALLERY SECTION WITH LIGHTBOX -->
+<section class="history-section">
+    <h2 class="section-title">Archival Gallery</h2>
+    <div class="archive-grid">
+        <div class="archive-item" data-lightbox="archive">
+            <img src="images/archive/OjoLag2005.jpeg" alt="AIMAAN WORKSHOP, Ojokoro Lagos 2005">
+            <p>Professor Moshood Adenrele Fashola (in white cap) at the AIMAAN Workshop, Ojokoro, Lagos – 2005. Also pictured: Grand Master N. O. Yusuf, Grand Master Ibrahim Rafiu King, and Senior Master Bashir Oyetunji</p>
+        </div>
+        <div class="archive-item" data-lightbox="archive">
+            <img src="images/archive/gm-ibrahim.jpeg" alt="Grandmaster Ibrahim Rafiu King">
+            <p>Grand Master Ibrahim Rafiu King (center), Grand Master Kehinde Salawu, and Grand Master Tunji at the AIMAAN Grading, 1990s.</p>
+        </div>
+        <div class="archive-item" data-lightbox="archive">
+            <img src="images/archive/early-members.jpeg" alt="Early AIMAAN Members">
+            <p>Veteran AIMAAN Black Belters with Grand Master N. O. Yusuf.</p>
+        </div>
+        <div class="archive-item" data-lightbox="archive">
+            <img src="images/archive/workshoptraining-2005.jpeg" alt="AIMAAN Workshop 2005">
+            <p>AIMAAN members training during the AIMAAN Workshop, Ojokoro, Lagos – 2005.</p>
+        </div>
+        <div class="archive-item" data-lightbox="archive">
+            <img src="images/archive/femaleveterans-group.jpeg" alt="AIMAAN Female Veterans Group Photo">
+            <p>Early Female Generation Members</p>
+        </div>
+        <div class="archive-item" data-lightbox="archive">
+            <img src="images/archive/Honorary-certificate.jpeg" alt="Black Belt Honorary Certificate">
+            <p>AIMAAN presents a Black Belt Honorary Certificate to the Amir Sahib, Head of Ahmadiyya Nigeria, under the leadership of Master Arowora AbdulRoqeeb – 2025.</p>
+        </div>
+        <div class="archive-item" data-lightbox="archive">
+            <img src="images/archive/veterans-demo.jpeg" alt="AIMAAN veterans-demo">
+            <p>Grand Master Ibrahim King and other AIMAAN Veterans in a demo</p>
+        </div>
+    </div>
+</section>
+
+<!-- ARCHIVE LIGHTBOX MODAL (Add this after the archive section) -->
+<div class="archive-lightbox" id="archiveLightbox">
+    <span class="lightbox-close" id="archiveLightboxClose">&times;</span>
+    <img src="" alt="" id="archiveLightboxImg">
+    <div class="lightbox-caption" id="archiveLightboxCaption"></div>
+    <button class="lightbox-prev" id="archiveLightboxPrev">&#10094;</button>
+    <button class="lightbox-next" id="archiveLightboxNext">&#10095;</button>
+</div>
     </main>
 
     <!-- Footer -->

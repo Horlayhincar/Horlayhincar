@@ -585,3 +585,85 @@ window.addEventListener('pageshow', (event) => {
         setTimeout(initCarousel, 100);
     }
 });
+
+// ==================== ARCHIVE GALLERY LIGHTBOX ====================
+const archiveLightbox = document.getElementById('archiveLightbox');
+const archiveLightboxImg = document.getElementById('archiveLightboxImg');
+const archiveLightboxCaption = document.getElementById('archiveLightboxCaption');
+const archiveLightboxClose = document.getElementById('archiveLightboxClose');
+const archiveLightboxPrev = document.getElementById('archiveLightboxPrev');
+const archiveLightboxNext = document.getElementById('archiveLightboxNext');
+
+let currentArchiveImageIndex = 0;
+let archiveImages = [];
+
+function updateArchiveImages() {
+    archiveImages = Array.from(document.querySelectorAll('[data-lightbox="archive"]'));
+}
+
+function openArchiveLightbox(item) {
+    if (!archiveLightboxImg || !archiveLightbox) return;
+    const img = item.querySelector('img');
+    if (!img) return;
+    
+    archiveLightboxImg.src = img.src;
+    archiveLightboxImg.alt = img.alt;
+    
+    const caption = item.querySelector('p');
+    if (caption && archiveLightboxCaption) {
+        archiveLightboxCaption.textContent = caption.textContent;
+    }
+    
+    currentArchiveImageIndex = archiveImages.indexOf(item);
+    modalManager.openModal(archiveLightbox);
+}
+
+function navigateArchiveLightbox(direction) {
+    if (archiveImages.length === 0) return;
+    currentArchiveImageIndex = (currentArchiveImageIndex + direction + archiveImages.length) % archiveImages.length;
+    openArchiveLightbox(archiveImages[currentArchiveImageIndex]);
+}
+
+// Make archive items clickable
+document.addEventListener('DOMContentLoaded', () => {
+    updateArchiveImages();
+    
+    archiveImages.forEach(item => {
+        item.style.cursor = 'pointer';
+        item.addEventListener('click', function() {
+            updateArchiveImages();
+            openArchiveLightbox(this);
+        });
+    });
+});
+
+// Close archive lightbox
+if (archiveLightboxClose) {
+    archiveLightboxClose.addEventListener('click', () => {
+        modalManager.closeModal(archiveLightbox);
+    });
+}
+
+// Navigate archive lightbox
+if (archiveLightboxPrev) {
+    archiveLightboxPrev.addEventListener('click', () => navigateArchiveLightbox(-1));
+}
+
+if (archiveLightboxNext) {
+    archiveLightboxNext.addEventListener('click', () => navigateArchiveLightbox(1));
+}
+
+// Keyboard support for escape and arrow keys
+document.addEventListener('keydown', (e) => {
+    if (archiveLightbox.classList.contains('active')) {
+        if (e.key === 'Escape') {
+            modalManager.closeModal(archiveLightbox);
+        }
+        if (e.key === 'ArrowLeft') {
+            navigateArchiveLightbox(-1);
+        }
+        if (e.key === 'ArrowRight') {
+            navigateArchiveLightbox(1);
+        }
+    }
+});
