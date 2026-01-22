@@ -21,7 +21,7 @@ body {
     overflow-x: hidden;
 }
 
-/* ==================== NAVIGATION ==================== */
+/* ==================== NAVIGATION FIX ==================== */
 nav {
     position: fixed;
     top: 0;
@@ -32,17 +32,13 @@ nav {
     transition: all 0.3s ease;
 }
 
-nav.scrolled {
-    box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-}
-
 .nav-container {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 2rem 0.5rem 1rem;
 }
 
 .logo-container {
@@ -50,23 +46,28 @@ nav.scrolled {
     align-items: center;
     gap: 1rem;
     text-decoration: none;
+    margin-left: -8px;
+    padding-left: 0;
 }
 
 .logo-img {
     width: 60px;
     height: 60px;
     object-fit: contain;
+    margin-left: 0;
 }
 
 .logo-text {
     display: flex;
     flex-direction: column;
+    padding-left: 0;
 }
 
 .logo-text .main {
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--primary-color);
+    letter-spacing: 0.5px;
 }
 
 .logo-text .sub {
@@ -75,18 +76,27 @@ nav.scrolled {
     letter-spacing: 1px;
 }
 
+/* ==================== NAVIGATION MENU ALIGNMENT FIX ==================== */
 .nav-links {
     display: flex;
     list-style: none;
     gap: 2rem;
+    margin: 0;
+    padding: 0;
+    justify-content: space-between; /* Changed to space-between for justified look */
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .nav-links a {
     color: var(--text-light);
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 700;
     transition: color 0.3s ease;
     position: relative;
+    white-space: nowrap; /* Prevent text wrapping */
 }
 
 .nav-links a::after {
@@ -378,46 +388,33 @@ nav.scrolled {
     opacity: 0.9;
 }
 
-/* ==================== INSTRUCTORS SECTION ==================== */
+/* ==================== INSTRUCTORS SECTION - CAROUSEL FIX ==================== */
 .instructors {
     padding: 5rem 2rem;
     background-color: #f8f9fa;
     text-align: center;
 }
 
-.instructors h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: var(--secondary-color);
-}
-
-.instructors .section-subtitle {
-    font-size: 1.2rem;
-    margin-bottom: 3rem;
-    color: var(--primary-color);
-}
-
-/* Carousel Container */
 .instructor-carousel {
     position: relative;
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto 2rem;
     overflow: hidden;
-    padding: 0 20px;
+    padding: 0;
 }
 
-/* Carousel Track */
 .carousel-track {
     display: flex;
-    transition: transform 0.5s ease-in-out;
     gap: 20px;
+    transition: transform 0.5s ease-in-out;
     padding: 20px 0;
 }
 
-/* Instructor Card with Unique Background Colors */
+/* ===== CRITICAL FIX FOR INSTRUCTOR CARDS ===== */
 .instructor-card {
-    min-width: calc(25% - 15px); /* 4 cards on desktop */
     flex: 0 0 calc(25% - 15px);
+    min-width: 0;
     text-align: center;
     padding: 30px 20px;
     border-radius: 20px;
@@ -425,9 +422,12 @@ nav.scrolled {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
 }
 
-/* Background colors for each card */
 .instructor-card:nth-child(1) {
     background: linear-gradient(135deg, #0e0400, #ff8e53);
     color: white;
@@ -468,12 +468,31 @@ nav.scrolled {
     color: white;
 }
 
+.instructor-card:nth-child(9) {
+    background: linear-gradient(135deg, #0e0400, #ff8e53);
+    color: white;
+}
+
+.instructor-card:nth-child(10) {
+    background: linear-gradient(135deg, #ff6b35, #0e0400);
+    color: white;
+}
+
+.instructor-card:nth-child(11) {
+    background: linear-gradient(135deg, #0e0400, #ff8e53);
+    color: white;
+}
+
+.instructor-card:nth-child(12) {
+    background: linear-gradient(135deg, #ff6b35, #0e0400);
+    color: white;
+}
+
 .instructor-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
 }
 
-/* Instructor Image with White Border */
 .instructor-image {
     width: 230px;
     height: 230px;
@@ -486,6 +505,7 @@ nav.scrolled {
     transition: transform 0.3s ease, border-color 0.3s ease;
     background: rgba(255, 255, 255, 0.1);
     padding: 5px;
+    flex-shrink: 0;
 }
 
 .instructor-card:hover .instructor-image {
@@ -493,11 +513,11 @@ nav.scrolled {
     border-color: rgba(255, 255, 255, 0.6);
 }
 
-/* Instructor Info */
 .instructor-info {
     text-align: center;
     position: relative;
     z-index: 2;
+    width: 100%;
 }
 
 .instructor-info h3 {
@@ -515,7 +535,6 @@ nav.scrolled {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* Pattern overlay for visual interest */
 .instructor-card::before {
     content: '';
     position: absolute;
@@ -530,8 +549,7 @@ nav.scrolled {
 /* ==================== RESPONSIVE INSTRUCTOR CAROUSEL ==================== */
 @media (max-width: 1024px) {
     .instructor-card {
-        min-width: calc(33.333% - 15px); /* 3 cards on tablet */
-        flex: 0 0 calc(33.333% - 15px);
+        flex: 0 0 calc(33.333% - 14px);
     }
     
     .instructor-image {
@@ -546,8 +564,7 @@ nav.scrolled {
 
 @media (max-width: 768px) {
     .instructor-card {
-        min-width: calc(50% - 15px); /* 2 cards on small tablets */
-        flex: 0 0 calc(50% - 15px);
+        flex: 0 0 calc(50% - 10px);
         padding: 25px 15px;
     }
     
@@ -555,6 +572,7 @@ nav.scrolled {
         width: 170px;
         height: 170px;
         border-width: 4px;
+        margin: 0 auto 20px;
     }
     
     .instructor-info h3 {
@@ -568,26 +586,21 @@ nav.scrolled {
 
 @media (max-width: 480px) {
     .instructor-card {
-        min-width: calc(100% - 15px); /* 1 card on mobile */
-        flex: 0 0 calc(100% - 15px);
+        flex: 0 0 100%;
         padding: 30px 20px;
     }
     
     .instructor-image {
         width: 170px;
         height: 170px;
+        margin: 0 auto 20px;
     }
     
     .instructors {
         padding: 3rem 1rem;
     }
-    
-    .instructor-carousel {
-        padding: 0 15px;
-    }
 }
 
-/* ==================== INSTRUCTOR CAROUSEL NAVIGATION ==================== */
 .carousel-nav {
     display: flex;
     justify-content: center;
@@ -618,54 +631,6 @@ nav.scrolled {
     background: #e55a2b;
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
-}
-
-.carousel-prev:active,
-.carousel-next:active {
-    transform: translateY(0);
-}
-
-/* Ensure carousel track is properly aligned */
-.carousel-track {
-    display: flex;
-    gap: 20px;
-    transition: transform 0.5s ease-in-out;
-    padding: 10px 0;
-}
-
-/* Make sure instructor cards have proper sizing */
-.instructor-card {
-    min-width: calc(25% - 15px);
-    flex: 0 0 calc(25% - 15px);
-}
-
-/* Responsive adjustments for carousel */
-@media (max-width: 1024px) {
-    .instructor-card {
-        min-width: calc(33.333% - 15px);
-        flex: 0 0 calc(33.333% - 15px);
-    }
-}
-
-@media (max-width: 768px) {
-    .instructor-card {
-        min-width: calc(50% - 15px);
-        flex: 0 0 calc(50% - 15px);
-    }
-}
-
-@media (max-width: 480px) {
-    .instructor-card {
-        min-width: calc(100% - 15px);
-        flex: 0 0 calc(100% - 15px);
-    }
-    
-    .carousel-prev,
-    .carousel-next {
-        width: 45px;
-        height: 45px;
-        font-size: 1.3rem;
-    }
 }
 
 /* ==================== GALLERY SECTION ==================== */
@@ -1616,6 +1581,11 @@ footer {
         text-align: center;
         transition: 0.3s;
         padding: 2rem;
+        justify-content: flex-start; /* Stack items at top */
+        gap: 1.5rem;
+        height: calc(100vh - 80px);
+        overflow-y: auto;
+        z-index: 999;
     }
 
     .nav-links.active {
@@ -1646,5 +1616,476 @@ footer {
     .cta-buttons {
         flex-direction: column;
         align-items: center;
+    }
+    
+    /* Adjust logo size for mobile */
+    .logo-img {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .logo-text .main {
+        font-size: 1.3rem;
+    }
+    
+    /* Mobile menu items */
+    .nav-links li {
+        width: 100%;
+    }
+    
+    .nav-links a {
+        display: block;
+        padding: 1rem;
+        font-size: 1.2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-links a::after {
+        display: none; /* Hide underline on mobile */
+    }
+}
+
+/* ==================== HISTORY PAGE STYLES ==================== */
+
+/* History Hero Section */
+.history-hero {
+    background: linear-gradient(135deg, rgba(26,26,26,0.85), rgba(255,107,53,0.7)), 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%231a1a1a" width="1200" height="800"/><path fill="%23ff6b35" opacity="0.2" d="M0 400 Q300 200 600 400 T1200 400 V800 H0 Z"/></svg>');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 8rem 2rem 4rem;
+    text-align: center;
+    position: relative;
+    margin-top: 80px;
+}
+
+.history-hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+}
+
+.history-hero p {
+    font-size: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+    opacity: 0.9;
+}
+
+/* History Container */
+.history-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.history-section {
+    margin-bottom: 4rem;
+}
+
+.history-section .section-title {
+    text-align: left;
+    margin-bottom: 2rem;
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+.history-section .section-title::after {
+    left: 0;
+    transform: none;
+}
+
+.history-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.history-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+.history-card h4 {
+    color: var(--secondary-color);
+    margin: 1.5rem 0 1rem;
+    font-size: 1.3rem;
+}
+
+/* Pioneer Profiles */
+.pioneer-profile {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.pioneer-img {
+    width: 100%;
+    height: 350px;
+    border-radius: 15px;
+    object-fit: cover;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+
+.pioneer-info h3 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.pioneer-title {
+    color: var(--secondary-color);
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+/* Timeline */
+.timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--primary-color);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 3rem;
+    padding-left: 2rem;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 0 0 4px var(--primary-color);
+}
+
+.timeline-year {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.timeline-item h3 {
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.grading-panel {
+    background: var(--bg-light);
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin: 1rem 0;
+    border-left: 4px solid var(--primary-color);
+}
+
+.grading-panel h4 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.grading-panel ul {
+    list-style: none;
+    padding-left: 1rem;
+}
+
+.grading-panel li {
+    margin-bottom: 0.5rem;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.grading-panel li::before {
+    content: '•';
+    color: var(--primary-color);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+/* Veterans Grid */
+.veterans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.veteran-card {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    border-top: 4px solid var(--primary-color);
+    font-size: 0.9rem;
+    transition: transform 0.3s ease;
+}
+
+.veteran-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(255,107,53,0.2);
+}
+
+/* Departments */
+.department-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.department-card {
+    background: var(--bg-light);
+    padding: 2rem;
+    border-radius: 15px;
+    border-left: 5px solid var(--primary-color);
+    transition: transform 0.3s ease;
+}
+
+.department-card:hover {
+    transform: translateY(-5px);
+}
+
+.department-card h4 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.executive-list {
+    margin-top: 1rem;
+}
+
+.executive-list ul {
+    list-style: none;
+    padding-left: 1rem;
+}
+
+.executive-list li {
+    margin-bottom: 0.5rem;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.executive-list li::before {
+    content: '•';
+    color: var(--primary-color);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+/* Achievement Section */
+.achievement-section {
+    background: var(--bg-light);
+    padding: 3rem;
+    border-radius: 15px;
+    margin: 3rem 0;
+}
+
+.tournaments-list ul {
+    columns: 2;
+    column-gap: 2rem;
+    margin: 1rem 0;
+}
+
+.tournaments-list li {
+    margin-bottom: 0.5rem;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.tournaments-list li::before {
+    content: '✓';
+    color: var(--primary-color);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+/* Fallen Heroes */
+.fallen-heroes {
+    background: rgba(255, 107, 53, 0.05);
+    padding: 3rem;
+    border-radius: 15px;
+    margin: 3rem 0;
+    border-left: 5px solid #ff6b35;
+}
+
+.fallen-hero-card {
+    background: white;
+    padding: 2rem;
+    margin: 1.5rem 0;
+    border-radius: 10px;
+    border-left: 4px solid #e55a2b;
+    transition: transform 0.3s ease;
+}
+
+.fallen-hero-card:hover {
+    transform: translateY(-3px);
+}
+
+.fallen-hero-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+}
+
+.fallen-hero-card p {
+    margin-bottom: 0.8rem;
+}
+
+/* Archive Gallery */
+.archive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.archive-item {
+    text-align: center;
+}
+
+.archive-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.archive-item img:hover {
+    transform: scale(1.03);
+}
+
+.archive-item p {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* State Coaches List */
+.state-coaches-list .veterans-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.state-coaches-list .veteran-card {
+    text-align: left;
+    padding: 1rem;
+}
+
+/* Current Leadership */
+.current-leadership {
+    margin-top: 2rem;
+}
+
+.current-leadership h4 {
+    color: var(--primary-color);
+    margin: 1rem 0 0.5rem;
+}
+
+/* Responsive Design for History Page */
+@media (max-width: 768px) {
+    .history-hero {
+        padding: 6rem 1rem 3rem;
+        margin-top: 60px;
+    }
+    
+    .history-hero h1 {
+        font-size: 2.5rem;
+    }
+    
+    .history-hero p {
+        font-size: 1.2rem;
+    }
+    
+    .history-container {
+        padding: 1rem;
+    }
+    
+    .pioneer-profile {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .pioneer-img {
+        height: 250px;
+    }
+    
+    .veterans-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    
+    .department-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .timeline {
+        padding-left: 1.5rem;
+    }
+    
+    .timeline-item {
+        padding-left: 1.5rem;
+    }
+    
+    .tournaments-list ul {
+        columns: 1;
+    }
+    
+    .archive-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .history-hero h1 {
+        font-size: 2rem;
+    }
+    
+    .history-hero p {
+        font-size: 1rem;
+    }
+    
+    .veterans-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+    
+    .archive-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .fallen-hero-card {
+        padding: 1.5rem;
     }
 }

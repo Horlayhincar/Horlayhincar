@@ -3,38 +3,62 @@ const mobileMenu = document.getElementById('mobileMenu');
 const navLinks = document.getElementById('navLinks');
 
 if (mobileMenu && navLinks) {
-    mobileMenu.addEventListener('click', () => {
+    mobileMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
         navLinks.classList.toggle('active');
+        mobileMenu.setAttribute('aria-expanded', navLinks.classList.contains('active'));
     });
 }
 
-// Close mobile menu when clicking on a link
 document.querySelectorAll('.nav-links a').forEach(link => {
     link.addEventListener('click', () => {
         navLinks?.classList.remove('active');
+        mobileMenu?.setAttribute('aria-expanded', 'false');
     });
+});
+
+document.addEventListener('click', (e) => {
+    if (navLinks?.classList.contains('active') && 
+        !navLinks.contains(e.target) && 
+        e.target !== mobileMenu) {
+        navLinks.classList.remove('active');
+        mobileMenu?.setAttribute('aria-expanded', 'false');
+    }
 });
 
 // ==================== NAVBAR SCROLL EFFECT ====================
 const navbar = document.getElementById('navbar');
 
 if (navbar) {
-    window.addEventListener('scroll', () => {
+    let scrollTimeout;
+    
+    function handleNavbarScroll() {
         navbar.classList.toggle('scrolled', window.scrollY > 50);
+    }
+    
+    window.addEventListener('scroll', () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(handleNavbarScroll, 10);
     });
+    
+    handleNavbarScroll();
 }
 
 // ==================== SMOOTH SCROLLING ====================
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href === '#') return;
+        
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
+        const target = document.querySelector(href);
         if (target) {
             target.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start'
             });
             navLinks?.classList.remove('active');
+            mobileMenu?.setAttribute('aria-expanded', 'false');
         }
     });
 });
@@ -47,13 +71,14 @@ function clearContactForm() {
     }
 }
 
-// Clear form on page load and when returning via back button
-window.addEventListener('load', clearContactForm);
-window.addEventListener('pageshow', function(event) {
-    if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-        clearContactForm();
-    }
-});
+if (document.getElementById('contactForm')) {
+    window.addEventListener('load', clearContactForm);
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+            clearContactForm();
+        }
+    });
+}
 
 // ==================== INTERSECTION OBSERVER FOR ANIMATIONS ====================
 const observerOptions = {
@@ -64,74 +89,89 @@ const observerOptions = {
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
+            entry.target.classList.add('animated');
         }
     });
 }, observerOptions);
 
-// Apply animation to cards
-document.querySelectorAll('.about-card, .program-card, .value-card, .instructor-card, .news-card, .testimonial-card, .gallery-item').forEach(card => {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(20px)';
-    card.style.transition = 'all 0.6s ease';
-    observer.observe(card);
+const animatedElements = [
+    '.about-card', '.program-card', '.value-card', 
+    '.instructor-card', '.news-card', '.testimonial-card', '.gallery-item'
+].join(',');
+
+document.querySelectorAll(animatedElements).forEach(element => {
+    element.classList.add('will-animate');
+    observer.observe(element);
 });
+
+// ==================== MODAL MANAGERS ====================
+class ModalManager {
+    constructor() {
+        this.activeModal = null;
+    }
+
+    openModal(modal) {
+        if (this.activeModal) {
+            this.closeModal(this.activeModal);
+        }
+        modal?.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        this.activeModal = modal;
+    }
+
+    closeModal(modal) {
+        modal?.classList.remove('active');
+        document.body.style.overflow = '';
+        if (modal === this.activeModal) {
+            this.activeModal = null;
+        }
+    }
+}
+
+const modalManager = new ModalManager();
 
 // ==================== VIDEO MODAL HANDLER ====================
 const videoModal = document.getElementById('videoModal');
 const videoPlayer = document.getElementById('videoPlayer');
 const closeModal = document.getElementById('closeModal');
 
-function handleVideoModal(videoSrc, modal, player) {
-    if (!player || !modal) return;
-    
-    player.querySelector('source').src = videoSrc;
-    player.load();
-    modal.classList.add('active');
-    player.play();
-    document.body.style.overflow = 'hidden';
+function openVideoModal(videoSrc) {
+    if (!videoPlayer || !videoModal) return;
+    const source = videoPlayer.querySelector('source');
+    if (source) {
+        source.src = videoSrc;
+        videoPlayer.load();
+        modalManager.openModal(videoModal);
+    }
 }
 
-function closeVideoModal(modal, player) {
-    if (!modal || !player) return;
-    
-    modal.classList.remove('active');
-    player.pause();
-    player.currentTime = 0;
-    document.body.style.overflow = '';
+function closeVideoModal() {
+    if (!videoModal || !videoPlayer) return;
+    videoPlayer.pause();
+    videoPlayer.currentTime = 0;
+    modalManager.closeModal(videoModal);
 }
 
-// ONLY handle buttons with data-video attribute (for gallery videos)
-document.querySelectorAll('.watch-video-btn[data-video]').forEach(button => {
+document.querySelectorAll('[data-video]:not([data-youtube])').forEach(button => {
     button.addEventListener('click', function() {
         const videoSrc = this.getAttribute('data-video');
-        handleVideoModal(videoSrc, videoModal, videoPlayer);
+        openVideoModal(videoSrc);
     });
 });
 
-// Close modal events
 if (closeModal) {
-    closeModal.addEventListener('click', () => closeVideoModal(videoModal, videoPlayer));
+    closeModal.addEventListener('click', closeVideoModal);
 }
 
-if (videoModal) {
-    videoModal.addEventListener('click', (e) => {
-        if (e.target === videoModal) closeVideoModal(videoModal, videoPlayer);
-    });
-}
-
-// ==================== GALLERY TOGGLE FUNCTIONALITY ====================
+// ==================== GALLERY TOGGLE ====================
 const viewGalleriesBtn = document.getElementById('viewGalleriesBtn');
 const galleryContent = document.getElementById('galleryContent');
 const closeGalleriesBtn = document.getElementById('closeGalleriesBtn');
 
 function openGallery() {
     if (!galleryContent || !viewGalleriesBtn) return;
-    
     galleryContent.classList.add('active');
     viewGalleriesBtn.style.display = 'none';
-    
     setTimeout(() => {
         galleryContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
@@ -139,47 +179,36 @@ function openGallery() {
 
 function closeGallery() {
     if (!galleryContent || !viewGalleriesBtn) return;
-    
     galleryContent.classList.remove('active');
     viewGalleriesBtn.style.display = 'block';
-    
-    setTimeout(() => {
-        document.getElementById('gallery').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
 }
 
-// Event listeners for gallery toggle
 if (viewGalleriesBtn) viewGalleriesBtn.addEventListener('click', openGallery);
 if (closeGalleriesBtn) closeGalleriesBtn.addEventListener('click', closeGallery);
 
-// ==================== GALLERY FILTER FUNCTIONALITY ====================
+// ==================== GALLERY FILTER ====================
 const filterBtns = document.querySelectorAll('.filter-btn');
 const galleryItems = document.querySelectorAll('.gallery-item');
 
-if (filterBtns.length > 0 && galleryItems.length > 0) {
+if (filterBtns.length > 0) {
     filterBtns.forEach(btn => {
         btn.addEventListener('click', function() {
+            const filterValue = this.getAttribute('data-filter');
             filterBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
-            
-            const filterValue = this.getAttribute('data-filter');
             
             galleryItems.forEach(item => {
                 const itemCategory = item.getAttribute('data-category');
                 const shouldShow = filterValue === 'all' || itemCategory === filterValue;
                 
                 if (shouldShow) {
-                    item.classList.remove('hide');
-                    setTimeout(() => {
-                        item.style.opacity = '1';
-                        item.style.transform = 'scale(1)';
-                    }, 10);
+                    item.style.display = '';
+                    item.style.opacity = '1';
                 } else {
-                    item.style.opacity = '0';
-                    item.style.transform = 'scale(0.8)';
-                    setTimeout(() => item.classList.add('hide'), 300);
+                    item.style.display = 'none';
                 }
             });
+            updateGalleryImages();
         });
     });
 }
@@ -196,266 +225,268 @@ let currentImageIndex = 0;
 let currentImages = [];
 
 function updateGalleryImages() {
-    currentImages = Array.from(document.querySelectorAll('.gallery-item:not(.hide)'));
+    currentImages = Array.from(document.querySelectorAll('.gallery-item:not([style*="display: none"])'));
 }
 
 function openLightbox(item) {
     if (!lightboxImg || !galleryLightbox) return;
-    
     const img = item.querySelector('img');
-    const overlay = item.querySelector('.gallery-overlay');
+    if (!img) return;
     
     lightboxImg.src = img.src;
     lightboxImg.alt = img.alt;
     
+    const overlay = item.querySelector('.gallery-overlay');
     if (overlay && lightboxCaption) {
         const title = overlay.querySelector('h4')?.textContent || '';
-        const description = overlay.querySelector('p')?.textContent || '';
-        lightboxCaption.textContent = title + (description ? ' - ' + description : '');
+        lightboxCaption.textContent = title;
     }
     
-    galleryLightbox.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeLightbox() {
-    if (!galleryLightbox) return;
-    galleryLightbox.classList.remove('active');
-    document.body.style.overflow = '';
+    currentImageIndex = currentImages.indexOf(item);
+    modalManager.openModal(galleryLightbox);
 }
 
 function navigateLightbox(direction) {
     if (currentImages.length === 0) return;
-    
-    let attempts = 0;
-    do {
-        currentImageIndex = (currentImageIndex + direction + currentImages.length) % currentImages.length;
-        attempts++;
-    } while (currentImages[currentImageIndex].getAttribute('data-type') === 'video' && attempts < currentImages.length);
-    
+    currentImageIndex = (currentImageIndex + direction + currentImages.length) % currentImages.length;
     openLightbox(currentImages[currentImageIndex]);
 }
 
-// Gallery item click handlers
-galleryItems.forEach((item, index) => {
+galleryItems.forEach(item => {
     item.addEventListener('click', function() {
-        if (this.classList.contains('hide')) return;
-        
+        if (this.style.display === 'none') return;
         const itemType = this.getAttribute('data-type');
         
         if (itemType === 'video') {
             const videoSrc = this.getAttribute('data-video');
             openVideoModal(videoSrc);
         } else {
-            const visibleItems = Array.from(document.querySelectorAll('.gallery-item:not(.hide)'));
-            currentImageIndex = visibleItems.indexOf(this);
-            currentImages = visibleItems;
+            updateGalleryImages();
             openLightbox(this);
         }
     });
 });
 
-// Lightbox event listeners
-if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+if (lightboxClose) lightboxClose.addEventListener('click', () => modalManager.closeModal(galleryLightbox));
 if (lightboxPrev) lightboxPrev.addEventListener('click', () => navigateLightbox(-1));
 if (lightboxNext) lightboxNext.addEventListener('click', () => navigateLightbox(1));
 
-if (galleryLightbox) {
-    galleryLightbox.addEventListener('click', (e) => {
-        if (e.target === galleryLightbox) closeLightbox();
-    });
-}
-
-// ==================== GALLERY VIDEO MODAL ====================
-const galleryVideoModal = document.getElementById('galleryVideoModal');
-const galleryVideoPlayer = document.getElementById('galleryVideoPlayer');
-const galleryVideoClose = document.getElementById('galleryVideoClose');
-
-function openVideoModal(videoSrc) {
-    if (!galleryVideoPlayer || !galleryVideoModal) return;
-    
-    galleryVideoPlayer.querySelector('source').src = videoSrc;
-    galleryVideoPlayer.load();
-    galleryVideoModal.classList.add('active');
-    galleryVideoPlayer.play();
-    document.body.style.overflow = 'hidden';
-}
-
-function closeVideoModal() {
-    if (!galleryVideoModal || !galleryVideoPlayer) return;
-    
-    galleryVideoModal.classList.remove('active');
-    galleryVideoPlayer.pause();
-    galleryVideoPlayer.currentTime = 0;
-    document.body.style.overflow = '';
-}
-
-// Video modal event listeners
-if (galleryVideoClose) {
-    galleryVideoClose.addEventListener('click', closeVideoModal);
-}
-
-if (galleryVideoModal) {
-    galleryVideoModal.addEventListener('click', (e) => {
-        if (e.target === galleryVideoModal) closeVideoModal();
-    });
-}
-
-// ==================== YOUTUBE MODAL HANDLER ====================
+// ==================== YOUTUBE MODAL ====================
 const youtubeModal = document.getElementById('youtubeModal');
 const youtubePlayer = document.getElementById('youtubePlayer');
 const youtubeClose = document.getElementById('youtubeClose');
 
 function openYouTubeModal(videoId) {
     if (!youtubeModal || !youtubePlayer) return;
-    
-    // Construct YouTube embed URL
-    const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+    const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
     youtubePlayer.src = embedUrl;
-    
-    youtubeModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    modalManager.openModal(youtubeModal);
 }
 
 function closeYouTubeModal() {
     if (!youtubeModal || !youtubePlayer) return;
-    
-    youtubeModal.classList.remove('active');
-    youtubePlayer.src = ''; // Stop the video
-    document.body.style.overflow = '';
+    youtubePlayer.src = '';
+    modalManager.closeModal(youtubeModal);
 }
 
-// YouTube video buttons - ONLY for buttons with data-youtube attribute
-document.querySelectorAll('.watch-video-btn[data-youtube]').forEach(button => {
+document.querySelectorAll('[data-youtube]').forEach(button => {
     button.addEventListener('click', function(e) {
-        e.preventDefault(); // Prevent any default behavior
-        e.stopPropagation(); // Stop event from bubbling up
-        
+        e.preventDefault();
         const videoId = this.getAttribute('data-youtube');
-        console.log('Opening YouTube modal with ID:', videoId); // Debug log
         openYouTubeModal(videoId);
     });
 });
 
-// Close modal events
-if (youtubeClose) {
-    youtubeClose.addEventListener('click', closeYouTubeModal);
+if (youtubeClose) youtubeClose.addEventListener('click', closeYouTubeModal);
+
+// ==================== FIXED CAROUSEL CLASS ====================
+class ImprovedCarousel {
+    constructor() {
+        this.container = document.querySelector('.instructor-carousel');
+        this.track = document.querySelector('.carousel-track');
+        this.cards = Array.from(document.querySelectorAll('.instructor-card'));
+        
+        if (!this.container || !this.track || this.cards.length === 0) {
+            return null;
+        }
+        
+        this.currentIndex = 0;
+        this.cardsPerView = 4;
+        this.autoSlideInterval = null;
+        this.isTransitioning = false;
+        
+        this.init();
+        return this;
+    }
+    
+    updateCardsPerView() {
+        const width = window.innerWidth;
+        let oldCardsPerView = this.cardsPerView;
+        
+        if (width <= 480) {
+            this.cardsPerView = 1;
+        } else if (width <= 768) {
+            this.cardsPerView = 2;
+        } else if (width <= 1024) {
+            this.cardsPerView = 3;
+        } else {
+            this.cardsPerView = 4;
+        }
+        
+        if (oldCardsPerView !== this.cardsPerView) {
+            this.currentIndex = 0;
+            this.updateTrackPosition();
+        }
+    }
+    
+    updateTrackPosition() {
+        if (this.isTransitioning || !this.track) return;
+        
+        this.isTransitioning = true;
+        
+        // Calculate total visible cards needed
+        const totalSlides = Math.ceil(this.cards.length / this.cardsPerView);
+        
+        // Calculate the gap and card width
+        const gap = 20;
+        const containerWidth = this.container.offsetWidth;
+        const cardWidth = (containerWidth - (gap * (this.cardsPerView - 1))) / this.cardsPerView;
+        
+        // Calculate transform
+        const slideDistance = cardWidth + gap;
+        const translateX = -(this.currentIndex * this.cardsPerView * slideDistance);
+        
+        this.track.style.transform = `translateX(${translateX}px)`;
+        
+        setTimeout(() => {
+            this.isTransitioning = false;
+        }, 500);
+    }
+    
+    moveToSlide(index) {
+        if (this.isTransitioning) return;
+        
+        this.updateCardsPerView();
+        const totalSlides = Math.ceil(this.cards.length / this.cardsPerView);
+        
+        if (index >= totalSlides) {
+            this.currentIndex = 0;
+        } else if (index < 0) {
+            this.currentIndex = totalSlides - 1;
+        } else {
+            this.currentIndex = index;
+        }
+        
+        this.updateTrackPosition();
+    }
+    
+    next() {
+        this.moveToSlide(this.currentIndex + 1);
+    }
+    
+    prev() {
+        this.moveToSlide(this.currentIndex - 1);
+    }
+    
+    startAutoSlide() {
+        this.stopAutoSlide();
+        this.autoSlideInterval = setInterval(() => {
+            if (!this.isTransitioning) {
+                this.next();
+            }
+        }, 5000);
+    }
+    
+    stopAutoSlide() {
+        if (this.autoSlideInterval) {
+            clearInterval(this.autoSlideInterval);
+            this.autoSlideInterval = null;
+        }
+    }
+    
+    createNavigation() {
+        const existingNav = this.container.querySelector('.carousel-nav');
+        if (existingNav) existingNav.remove();
+        
+        const nav = document.createElement('div');
+        nav.className = 'carousel-nav';
+        nav.innerHTML = `
+            <button class="carousel-prev">‹</button>
+            <button class="carousel-next">›</button>
+        `;
+        
+        this.container.appendChild(nav);
+        
+        const prevBtn = nav.querySelector('.carousel-prev');
+        const nextBtn = nav.querySelector('.carousel-next');
+        
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                this.prev();
+                this.stopAutoSlide();
+                this.startAutoSlide();
+            });
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                this.next();
+                this.stopAutoSlide();
+                this.startAutoSlide();
+            });
+        }
+    }
+    
+    handleResize() {
+        this.updateCardsPerView();
+        this.updateTrackPosition();
+    }
+    
+    init() {
+        // Ensure proper flex settings
+        this.track.style.display = 'flex';
+        this.track.style.gap = '20px';
+        
+        this.cards.forEach(card => {
+            card.style.flexShrink = '0';
+        });
+        
+        this.updateCardsPerView();
+        this.createNavigation();
+        this.startAutoSlide();
+        
+        this.container.addEventListener('mouseenter', () => {
+            this.stopAutoSlide();
+        });
+        
+        this.container.addEventListener('mouseleave', () => {
+            this.startAutoSlide();
+        });
+    }
 }
 
-if (youtubeModal) {
-    youtubeModal.addEventListener('click', (e) => {
-        if (e.target === youtubeModal) closeYouTubeModal();
+// ==================== CAROUSEL INITIALIZATION ====================
+let carousel = null;
+
+function initCarousel() {
+    const carouselContainer = document.querySelector('.instructor-carousel');
+    
+    if (!carouselContainer) return;
+    
+    if (carousel) {
+        carousel.stopAutoSlide();
+    }
+    
+    carousel = new ImprovedCarousel();
+    
+    window.addEventListener('resize', () => {
+        if (carousel) {
+            carousel.handleResize();
+        }
     });
 }
 
-// ==================== INSTRUCTOR CAROUSEL ====================
-let currentCarouselIndex = 0;
-let autoSlideInterval;
-let cardsPerView = 4;
-
-function updateCardsPerView() {
-    if (window.innerWidth <= 480) {
-        cardsPerView = 1;
-    } else if (window.innerWidth <= 768) {
-        cardsPerView = 2;
-    } else if (window.innerWidth <= 1024) {
-        cardsPerView = 3;
-    } else {
-        cardsPerView = 4;
-    }
-    return cardsPerView;
-}
-
-function moveToNextSlide() {
-    const track = document.querySelector('.carousel-track');
-    const cards = document.querySelectorAll('.instructor-card');
-    
-    if (!track || cards.length === 0) return;
-    
-    updateCardsPerView();
-    const totalSlides = Math.ceil(cards.length / cardsPerView);
-    
-    // Move to next slide
-    currentCarouselIndex = (currentCarouselIndex + 1) % totalSlides;
-    
-    // Calculate translation
-    const cardWidth = cards[0].offsetWidth + 20; // card width + gap
-    const translateX = -currentCarouselIndex * cardWidth * cardsPerView;
-    
-    track.style.transform = `translateX(${translateX}px)`;
-    track.style.transition = 'transform 0.5s ease-in-out';
-}
-
-function moveToPrevSlide() {
-    const track = document.querySelector('.carousel-track');
-    const cards = document.querySelectorAll('.instructor-card');
-    
-    if (!track || cards.length === 0) return;
-    
-    updateCardsPerView();
-    const totalSlides = Math.ceil(cards.length / cardsPerView);
-    
-    // Move to previous slide
-    currentCarouselIndex = (currentCarouselIndex - 1 + totalSlides) % totalSlides;
-    
-    // Calculate translation
-    const cardWidth = cards[0].offsetWidth + 20;
-    const translateX = -currentCarouselIndex * cardWidth * cardsPerView;
-    
-    track.style.transform = `translateX(${translateX}px)`;
-    track.style.transition = 'transform 0.5s ease-in-out';
-}
-
-function startInstructorCarousel() {
-    const track = document.querySelector('.carousel-track');
-    const cards = document.querySelectorAll('.instructor-card');
-    
-    if (!track || cards.length === 0) return;
-    
-    // Reset position
-    currentCarouselIndex = 0;
-    track.style.transform = 'translateX(0px)';
-    
-    // Clear existing interval
-    if (autoSlideInterval) {
-        clearInterval(autoSlideInterval);
-    }
-    
-    // Start auto-slide
-    autoSlideInterval = setInterval(moveToNextSlide, 4000);
-}
-
-function createCarouselNavigation() {
-    const carouselContainer = document.querySelector('.instructor-carousel');
-    if (!carouselContainer) return;
-    
-    // Remove existing navigation if any
-    const existingNav = carouselContainer.querySelector('.carousel-nav');
-    if (existingNav) existingNav.remove();
-    
-    // Create navigation buttons
-    const nav = document.createElement('div');
-    nav.className = 'carousel-nav';
-    nav.innerHTML = `
-        <button class="carousel-prev" id="carouselPrev">‹</button>
-        <button class="carousel-next" id="carouselNext">›</button>
-    `;
-    
-    carouselContainer.appendChild(nav);
-    
-    // Add event listeners
-    document.getElementById('carouselPrev')?.addEventListener('click', moveToPrevSlide);
-    document.getElementById('carouselNext')?.addEventListener('click', moveToNextSlide);
-}
-
-// Initialize carousel on load and resize
-function initInstructorCarousel() {
-    updateCardsPerView();
-    startInstructorCarousel();
-    createCarouselNavigation();
-}
-
-// ==================== CONTACT FORM HANDLER ====================
+// ==================== CONTACT FORM ====================
 const contactForm = document.getElementById('contactForm');
 
 if (contactForm) {
@@ -466,33 +497,25 @@ if (contactForm) {
         if (!submitBtn) return;
         
         const originalText = submitBtn.textContent;
-        
-        // Show loading state
         submitBtn.textContent = 'Sending...';
         submitBtn.disabled = true;
         
         try {
-            // Submit form data
             const formData = new FormData(this);
             const response = await fetch(this.action, {
                 method: 'POST',
                 body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
+                headers: { 'Accept': 'application/json' }
             });
             
             if (response.ok) {
-                showNotification('Message sent successfully! We\'ll get back to you soon.', 'success');
+                showNotification('Message sent successfully!', 'success');
                 this.reset();
             } else {
-                throw new Error('Form submission failed');
+                throw new Error('Submission failed');
             }
-            
         } catch (error) {
-            console.error('Form submission error:', error);
-            showNotification('Thank you! Your message has been sent. We\'ll get back to you soon.', 'success');
-            this.reset();
+            showNotification('Error sending message. Please try again.', 'error');
         } finally {
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
@@ -501,73 +524,64 @@ if (contactForm) {
 }
 
 function showNotification(message, type) {
-    const existingNotification = document.querySelector('.form-notification');
-    if (existingNotification) existingNotification.remove();
-    
     const notification = document.createElement('div');
     notification.className = `form-notification ${type}`;
     notification.textContent = message;
-    notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        padding: 1rem 2rem;
-        border-radius: 8px;
-        color: white;
-        font-weight: bold;
-        z-index: 10000;
-        animation: slideInRight 0.3s ease;
-        max-width: 400px;
-        background: ${type === 'success' ? '#4CAF50' : '#f44336'};
-    `;
-    
     document.body.appendChild(notification);
     
     setTimeout(() => {
-        notification.style.animation = 'slideOutRight 0.3s ease';
-        setTimeout(() => notification.remove(), 300);
+        notification.remove();
     }, 5000);
 }
 
-// Add notification styles
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideInRight {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes slideOutRight {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(100%); opacity: 0; }
-    }
-`;
-document.head.appendChild(style);
+if (!document.querySelector('#notification-styles')) {
+    const style = document.createElement('style');
+    style.id = 'notification-styles';
+    style.textContent = `
+        .form-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            z-index: 10000;
+            animation: slideInRight 0.3s ease;
+        }
+        .form-notification.success { background: #4CAF50; }
+        .form-notification.error { background: #f44336; }
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    `;
+    document.head.appendChild(style);
+}
 
 // ==================== KEYBOARD NAVIGATION ====================
-document.addEventListener('keydown', function(e) {
-    // Close modals with Escape key
+document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-        if (galleryLightbox?.classList.contains('active')) closeLightbox();
-        if (galleryVideoModal?.classList.contains('active')) closeVideoModal();
-        if (videoModal?.classList.contains('active')) closeVideoModal(videoModal, videoPlayer);
-        if (youtubeModal?.classList.contains('active')) closeYouTubeModal();
-        if (galleryContent?.classList.contains('active')) closeGallery();
+        modalManager.closeModal(modalManager.activeModal);
     }
     
-    // Lightbox navigation
-    if (galleryLightbox?.classList.contains('active')) {
-        if (e.key === 'ArrowLeft') navigateLightbox(-1);
-        if (e.key === 'ArrowRight') navigateLightbox(1);
+    if (carousel && e.key === 'ArrowLeft') {
+        carousel.prev();
+    }
+    if (carousel && e.key === 'ArrowRight') {
+        carousel.next();
     }
 });
 
-// ==================== INITIALIZATION ====================
-document.addEventListener('DOMContentLoaded', function() {
-    initInstructorCarousel();
+// ==================== INITIALIZE ON DOM READY ====================
+document.addEventListener('DOMContentLoaded', () => {
+    initCarousel();
     updateGalleryImages();
-    
-    // Reinitialize carousel on resize
-    window.addEventListener('resize', function() {
-        initInstructorCarousel();
-    });
+    document.documentElement.style.scrollBehavior = 'smooth';
+});
+
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        setTimeout(initCarousel, 100);
+    }
 });
