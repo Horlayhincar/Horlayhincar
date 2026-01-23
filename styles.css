@@ -1874,8 +1874,7 @@ footer {
     width: 100%;
     height: auto;
     max-width: 300px;
-    aspect-ratio: 3/4;
-    object-fit: cover;
+    object-fit: contain;
     object-position: center;
     border-radius: 15px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.2);
@@ -1901,7 +1900,6 @@ footer {
     
     .pioneer-img {
         max-width: 100%;
-        aspect-ratio: 3/4;
         height: auto;
     }
     
@@ -1917,7 +1915,6 @@ footer {
     
     .pioneer-img {
         max-width: 100%;
-        aspect-ratio: 3/4;
     }
     
     .pioneer-info h3 {
