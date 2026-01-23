@@ -1853,18 +1853,19 @@ footer {
 /* ========== PIONEER PROFILES - RESPONSIVE FIX ========== */
 .pioneer-profile {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 300px 1fr;
     gap: 3rem;
     margin-bottom: 3rem;
     background: white;
     border-radius: 15px;
     padding: 2rem;
     box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    align-items: start;   
 }
 
 .pioneer-img-container {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     width: 100%;
     overflow: hidden;
