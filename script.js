@@ -467,6 +467,7 @@ class ImprovedCarousel {
 
 // ==================== CAROUSEL INITIALIZATION ====================
 let carousel = null;
+let carouselResizeHandler = null;
 
 function initCarousel() {
     const carouselContainer = document.querySelector('.instructor-carousel');
@@ -477,13 +478,20 @@ function initCarousel() {
         carousel.stopAutoSlide();
     }
     
+    // Remove previous resize listener before adding a new one
+    if (carouselResizeHandler) {
+        window.removeEventListener('resize', carouselResizeHandler);
+    }
+    
     carousel = new ImprovedCarousel();
     
-    window.addEventListener('resize', () => {
+    carouselResizeHandler = () => {
         if (carousel) {
             carousel.handleResize();
         }
-    });
+    };
+    
+    window.addEventListener('resize', carouselResizeHandler);
 }
 
 // ==================== CONTACT FORM ====================

@@ -26,8 +26,8 @@ nav {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(26, 26, 26, 0.95);
-    backdrop-filter: blur(10px);
+    background: rgba(26, 26, 26, 0.98);
+    /* backdrop-filter: blur removed — expensive compositing layer on Mac Chrome */
     z-index: 1000;
     transition: all 0.3s ease;
     height: 80px;
@@ -265,7 +265,7 @@ nav {
                 url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%231a1a1a" width="1200" height="800"/><path fill="%23ff6b35" opacity="0.2" d="M0 400 Q300 200 600 400 T1200 400 V800 H0 Z"/></svg>');
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
+    /* background-attachment: fixed removed — causes Chrome/Mac GPU crash on scroll */
     overflow: hidden;
 }
 
